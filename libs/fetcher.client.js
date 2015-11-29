@@ -69,6 +69,7 @@ function Request (operation, resource, options) {
     this.operation = operation || OP_READ;
     this.resource = resource;
     this.options = {
+        xhrHeaders: options.xhrHeaders || {},
         xhrPath: options.xhrPath || DEFAULT_XHR_PATH,
         xhrTimeout: options.xhrTimeout || DEFAULT_XHR_TIMEOUT,
         corsPath: options.corsPath,
@@ -162,7 +163,7 @@ function executeRequest (request, resolve, reject) {
     var use_post;
     var allow_retry_post;
     var uri = clientConfig.uri;
-    var headers = clientConfig.xhrHeaders || {};
+    var headers = request.options.xhrHeaders || {};
     var requests;
     var params;
     var data;
@@ -283,6 +284,7 @@ function Fetcher (options) {
     this.options = {
         xhrPath: options.xhrPath,
         xhrTimeout: options.xhrTimeout,
+        xhrHeaders: options.xhrHeaders,
         corsPath: options.corsPath,
         context: options.context,
         contextPicker: options.contextPicker,
