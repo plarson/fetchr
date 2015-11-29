@@ -162,6 +162,7 @@ function executeRequest (request, resolve, reject) {
     var use_post;
     var allow_retry_post;
     var uri = clientConfig.uri;
+    var headers = clientConfig.xhrHeaders || {};
     var requests;
     var params;
     var data;
@@ -203,7 +204,7 @@ function executeRequest (request, resolve, reject) {
     }
 
     if (!use_post) {
-        return REST.get(uri, {}, lodash.merge({xhrTimeout: request.options.xhrTimeout}, clientConfig), function getDone(err, response) {
+        return REST.get(uri, headers, lodash.merge({xhrTimeout: request.options.xhrTimeout}, clientConfig), function getDone(err, response) {
             if (err) {
                 debug('Syncing ' + request.resource + ' failed: statusCode=' + err.statusCode, 'info');
                 return reject(err);
@@ -228,7 +229,7 @@ function executeRequest (request, resolve, reject) {
     }; // TODO: remove. leave here for now for backward compatibility
     uri = request._constructGroupUri(uri);
     allow_retry_post = (request.operation === OP_READ);
-    REST.post(uri, {}, data, lodash.merge({unsafeAllowRetry: allow_retry_post, xhrTimeout: request.options.xhrTimeout}, clientConfig), function postDone(err, response) {
+    REST.post(uri, headers, data, lodash.merge({unsafeAllowRetry: allow_retry_post, xhrTimeout: request.options.xhrTimeout}, clientConfig), function postDone(err, response) {
         if (err) {
             debug('Syncing ' + request.resource + ' failed: statusCode=' + err.statusCode, 'info');
             return reject(err);
